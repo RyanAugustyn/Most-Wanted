@@ -291,4 +291,14 @@ function findChildren(person, people) {
   return children;
 }
 
-function findAllDescendants() {}
+function findPersonDescendants(person, people) {
+  let children = findChildren(person, people);
+  let temp = [];
+  children.forEach((child) => {
+    let grandchildren = findChildren(child, people);
+    if (grandchildren.length > 0) {
+      temp = temp.concat(grandchildren);
+    }
+  });
+  return children.concat(temp);
+}
