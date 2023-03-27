@@ -92,13 +92,18 @@ function mainMenu(person, people) {
       break;
     case "family":
       //! TODO
-       findPersonFamily(person, people);
+      findPersonFamily(person, people);
       //displayPeople('Family', personFamily);
       break;
     case "descendants":
       //! TODO
       let personDescendants = findPersonDescendants(person, people);
-      displayPeople("Descendants", personDescendants);
+
+      if (personDescendants.length === 1) {
+        displayPersonInfo(personDescendants[0]);
+      } else {
+        displayPeople("Descendants", personDescendants);
+      }
       break;
     case "quit":
       return;
@@ -253,12 +258,13 @@ function displayPersonInfo(person) {
 }
 
 function findPersonFamily(person, people) {
-  let spouse = people.filter(function(member) {
+  let spouse = people.filter(function (member) {
     if (person.id == member.currentSpouse) {
       return true;
-    }});
+    }
+  });
 
-  let parents = people.filter(function(member) {
+  let parents = people.filter(function (member) {
     return person.parents.includes(member.id);
   });
   /*let parents = [];
@@ -266,20 +272,17 @@ function findPersonFamily(person, people) {
     parents.push(searchById(person.parents[i]));*/
 
   let siblings = new Set();
-  if(parents.length > 0)
-    siblings = new Set(findChildren(parents[0], people));
+  if (parents.length > 0) siblings = new Set(findChildren(parents[0], people));
   //if(parents.length == 2)
   //  siblings = new Set(...siblings.concat(findChildren(parents[1], people)), ...siblings);
 
   siblings = [...siblings];
   siblings = siblings.filter((sibling) => person.id != sibling.id);
 
-
   displayPeople("Spouse", spouse);
   displayPeople("Parents", parents);
   displayPeople("Siblings", siblings);
 }
-
 
 function findChildren(person, people) {
   let children = people.filter((personChecking) => {
@@ -294,13 +297,24 @@ function findChildren(person, people) {
 }
 
 function findPersonDescendants(person, people) {
-  let children = findChildren(person, people);
-  let temp = [];
-  children.forEach((child) => {
-    let grandchildren = findChildren(child, people);
-    if (grandchildren.length > 0) {
-      temp = temp.concat(grandchildren);
-    }
+  let children = people.filter((personChecking) => {
+    let isParent = false;
+    personChecking["parents"].forEach((parentID) => {
+      if (parentID === person.id) isParent = true;
+    });
+    return isParent;
   });
-  return children.concat(temp);
+
+  if (children.length === 0) {
+    return [];
+  } else {
+    let subChildren = [];
+    for (let i = 0; i < children.length; i++) {
+      subChildren = subChildren.concat(
+        findPersonDescendants(children[i], people)
+      );
+    }
+
+    return children.concat(subChildren);
+  }
 }
