@@ -82,12 +82,11 @@ function mainMenu(person, people) {
     case "info":
       //! TODO
       displayPersonInfo(person);
-
       break;
     case "family":
       //! TODO
-      // let personFamily = findPersonFamily(person, people);
-      // displayPeople('Family', personFamily);
+      let personFamily = findPersonFamily(person, people);
+      displayPeople('Family', personFamily);
       break;
     case "descendants":
       //! TODO
@@ -246,6 +245,40 @@ function displayPersonInfo(person) {
         Current Spouse ID: ${person.currentSpouse}`);
 }
 
+function findPersonFamily(person, people) {
+  let spouse = people.filter(function(member) {
+    if (person.id == member.currentSpouse) {
+      return true;
+    }});
+
+  /*let parents = people.filter(function(member) {
+    person.parents.includes(member.id);
+  });*/
+  let parents = [];
+  for(let i = 0; i < person.parents.length; i++)
+    parents.push(searchById(person.parents[i]));
+
+  let siblings = new Set();
+  if(parents.length > 0)
+    siblings = new Set(findChildren(parents[0]));
+  if(parents.length == 2)
+    siblings = new Set(...siblings.concat(findChildren(parents[1])), ...siblings);
+
+  siblings = [...siblings];
+
+
+  displayPeople("Spouse", spouse);
+  displayPeople("Parents", parents);
+  displayPeople("Siblings", siblings);
+}
+  /*
+  function displayPeople(displayTitle, peopleToDisplay) {
+    const formatedPeopleDisplayText = peopleToDisplay
+      .map((person) => `${person.firstName} ${person.lastName}`)
+      .join("\n");
+    alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
+  }
+*/
 function findChildren(person, people) {
   let children = people.filter((personChecking) => {
     let isParent = false;
