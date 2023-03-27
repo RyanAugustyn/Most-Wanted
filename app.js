@@ -246,7 +246,7 @@ function displayPersonInfo(person) {
         Current Spouse ID: ${person.currentSpouse}`);
 }
 
-function findPersonDescendants(person, people) {
+function findChildren(person, people) {
   let children = people.filter((personChecking) => {
     let isParent = false;
     personChecking["parents"].forEach((parentID) => {
@@ -257,3 +257,5 @@ function findPersonDescendants(person, people) {
 
   return children;
 }
+
+function findAllDescendants() {}
