@@ -81,7 +81,8 @@ function mainMenu(person, people) {
   switch (mainMenuUserActionChoice) {
     case "info":
       //! TODO
-      // displayPersonInfo(person);
+      displayPersonInfo(person);
+
       break;
     case "family":
       //! TODO
@@ -235,3 +236,31 @@ function getAllOccupations(people) {
   people.forEach((person) => occupationSet.add(person["occupation"]));
   return Array.from(occupationSet);
 }
+
+
+function displayPersonInfo(person) {
+        alert(`ID: ${person.id}
+        First Name: ${person.firstName}
+        Last Name: ${person.lastName} 
+        Gender: ${person.gender}
+        DOB: ${person.dob}
+        Height: ${person.height}
+        Weight: ${person.weight}
+        Eye Color: ${person.eyeColor}
+        Occupation: ${person.occupation}
+        Parents ID: ${person.parents}
+        Current Spouse ID: ${person.currentSpouse}`);
+}
+
+/*
+"id": 272822514,
+		"firstName": "Billy",
+		"lastName": "Bob",
+		"gender": "male",
+		"dob": "1/18/1949",
+		"height": 71,
+		"weight": 175,
+		"eyeColor": "brown",
+		"occupation": "programmer",
+		"parents": [],
+		"currentSpouse": 401222887*/
