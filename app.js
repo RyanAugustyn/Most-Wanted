@@ -9,18 +9,24 @@ function displayWelcome() {
 }
 
 function runSearchAndMenu(people) {
-  const searchResults = searchPeopleDataSet(people);
 
-  if (searchResults.length > 1) {
-    DisplayPeople("Search Results", searchResults);
-    runSearchAndMenu(searchResults);
-  } else if (searchResults.length === 1) {
+  let searchResults = searchPeopleDataSet(people);
+
+  while (searchResults.length > 1) {
+    console.log(searchResults);
+    displayPeople("Search Results", searchResults);
+    alert(`There are ${searchResults.length} results, please choose another trait to filter further...`)
+    searchResults = searchByTraits(searchResults);
+
+  } 
+  if (searchResults.length === 1) {
     const person = searchResults[0];
     mainMenu(person, people);
   } else {
     alert("No one was found in the search.");
   }
 }
+
 
 function searchPeopleDataSet(people) {
   const searchTypeChoice = validatedPrompt(
