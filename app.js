@@ -86,12 +86,13 @@ function mainMenu(person, people) {
       break;
     case "family":
       //! TODO
-       findPersonFamily(person, people);
+      findPersonFamily(person, people);
       //displayPeople('Family', personFamily);
       break;
     case "descendants":
       //! TODO
       let personDescendants = findPersonDescendants(person, people);
+
       if (personDescendants.length === 1) {
         displayPersonInfo(personDescendants[0]);
       } else {
@@ -251,12 +252,13 @@ function displayPersonInfo(person) {
 }
 
 function findPersonFamily(person, people) {
-  let spouse = people.filter(function(member) {
+  let spouse = people.filter(function (member) {
     if (person.id == member.currentSpouse) {
       return true;
-    }});
+    }
+  });
 
-  let parents = people.filter(function(member) {
+  let parents = people.filter(function (member) {
     return person.parents.includes(member.id);
   });
   /*let parents = [];
@@ -264,20 +266,17 @@ function findPersonFamily(person, people) {
     parents.push(searchById(person.parents[i]));*/
 
   let siblings = new Set();
-  if(parents.length > 0)
-    siblings = new Set(findChildren(parents[0], people));
+  if (parents.length > 0) siblings = new Set(findChildren(parents[0], people));
   //if(parents.length == 2)
   //  siblings = new Set(...siblings.concat(findChildren(parents[1], people)), ...siblings);
 
   siblings = [...siblings];
   siblings = siblings.filter((sibling) => person.id != sibling.id);
 
-
   displayPeople("Spouse", spouse);
   displayPeople("Parents", parents);
   displayPeople("Siblings", siblings);
 }
-
 
 function findChildren(person, people) {
   let children = people.filter((personChecking) => {
@@ -301,22 +300,15 @@ function findPersonDescendants(person, people) {
   });
 
   if (children.length === 0) {
-    return children;
+    return [];
   } else {
-    /*let furtherchildren = children.forEach((child) =>
-      findPersonDescendants(child, people)
-    );
-    if (furtherchildren.length != 0)
-      children = children.concat(furtherchildren);
+    let subChildren = [];
+    for (let i = 0; i < children.length; i++) {
+      subChildren = subChildren.concat(
+        findPersonDescendants(children[i], people)
+      );
+    }
 
-    return children;*/
-    let furtherchildren = children.map((child) =>
-      findPersonDescendants(child, people)
-    );
-
-    if (furtherchildren.length > 0 && furtherchildren[0].length > 1)
-      children = children.concat(furtherchildren);
-
-    return children;
+    return children.concat(subChildren);
   }
 }
