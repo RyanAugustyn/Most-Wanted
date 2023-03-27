@@ -92,7 +92,11 @@ function mainMenu(person, people) {
     case "descendants":
       //! TODO
       let personDescendants = findPersonDescendants(person, people);
-      displayPeople("Descendants", personDescendants);
+      if (personDescendants.length === 1) {
+        displayPersonInfo(personDescendants[0]);
+      } else {
+        displayPeople("Descendants", personDescendants);
+      }
       break;
     case "quit":
       return;
@@ -259,13 +263,31 @@ function findChildren(person, people) {
 }
 
 function findPersonDescendants(person, people) {
-  let children = findChildren(person, people);
-  let temp = [];
-  children.forEach((child) => {
-    let grandchildren = findChildren(child, people);
-    if (grandchildren.length > 0) {
-      temp = temp.concat(grandchildren);
-    }
+  let children = people.filter((personChecking) => {
+    let isParent = false;
+    personChecking["parents"].forEach((parentID) => {
+      if (parentID === person.id) isParent = true;
+    });
+    return isParent;
   });
-  return children.concat(temp);
+
+  if (children.length === 0) {
+    return children;
+  } else {
+    /*let furtherchildren = children.forEach((child) =>
+      findPersonDescendants(child, people)
+    );
+    if (furtherchildren.length != 0)
+      children = children.concat(furtherchildren);
+
+    return children;*/
+    let furtherchildren = children.map((child) =>
+      findPersonDescendants(child, people)
+    );
+
+    if (furtherchildren.length > 0 && furtherchildren[0].length > 1)
+      children = children.concat(furtherchildren);
+
+    return children;
+  }
 }
