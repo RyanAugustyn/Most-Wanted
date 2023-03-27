@@ -190,6 +190,13 @@ function searchByTraits(people) {
       );
       break;
     case "occupation":
+      let occupationToSearchFor = validatedPrompt(
+        "What occupation would you like to search for?",
+        getAllOccupations(people)
+      );
+      peopleResults = people.filter(
+        (person) => person["occupation"] === occupationToSearchFor
+      );
       break;
     default:
   }
@@ -213,18 +220,18 @@ function promptReturnNumber(message) {
 function getAllEyeColors(people) {
   let eyeSet = new Set();
 
-  return ["black", "brown", "blue", "green", "hazel"];
-  eyeSet.add(
-    people.forEach((person) => {
-      let temp = person["eyeColor"];
-      eyeSet.add(person["eyeColor"]);
-    })
-  );
+  //return ["black", "brown", "blue", "green", "hazel"];
+
+  people.forEach((person) => {
+    let temp = person["eyeColor"];
+    eyeSet.add(person["eyeColor"]);
+  });
   return Array.from(eyeSet);
 }
 
 function getAllOccupations(people) {
   let occupationSet = new Set();
 
-  occupationSet.add();
+  people.forEach((person) => occupationSet.add(person["occupation"]));
+  return Array.from(occupationSet);
 }
