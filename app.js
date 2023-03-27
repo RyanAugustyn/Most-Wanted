@@ -220,12 +220,7 @@ function promptReturnNumber(message) {
 function getAllEyeColors(people) {
   let eyeSet = new Set();
 
-  //return ["black", "brown", "blue", "green", "hazel"];
-
-  people.forEach((person) => {
-    let temp = person["eyeColor"];
-    eyeSet.add(person["eyeColor"]);
-  });
+  people.forEach((person) => eyeSet.add(person["eyeColor"]));
   return Array.from(eyeSet);
 }
 
