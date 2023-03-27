@@ -13,6 +13,7 @@ function runSearchAndMenu(people) {
 
   if (searchResults.length > 1) {
     DisplayPeople("Search Results", searchResults);
+    runSearchAndMenu(searchResults);
   } else if (searchResults.length === 1) {
     const person = searchResults[0];
     mainMenu(person, people);
@@ -82,12 +83,11 @@ function mainMenu(person, people) {
     case "info":
       //! TODO
       displayPersonInfo(person);
-
       break;
     case "family":
       //! TODO
-      // let personFamily = findPersonFamily(person, people);
-      // displayPeople('Family', personFamily);
+       findPersonFamily(person, people);
+      //displayPeople('Family', personFamily);
       break;
     case "descendants":
       //! TODO
@@ -249,6 +249,35 @@ function displayPersonInfo(person) {
         Parents ID: ${person.parents}
         Current Spouse ID: ${person.currentSpouse}`);
 }
+
+function findPersonFamily(person, people) {
+  let spouse = people.filter(function(member) {
+    if (person.id == member.currentSpouse) {
+      return true;
+    }});
+
+  let parents = people.filter(function(member) {
+    return person.parents.includes(member.id);
+  });
+  /*let parents = [];
+  for(let i = 0; i < person.parents.length; i++)
+    parents.push(searchById(person.parents[i]));*/
+
+  let siblings = new Set();
+  if(parents.length > 0)
+    siblings = new Set(findChildren(parents[0], people));
+  //if(parents.length == 2)
+  //  siblings = new Set(...siblings.concat(findChildren(parents[1], people)), ...siblings);
+
+  siblings = [...siblings];
+  siblings = siblings.filter((sibling) => person.id != sibling.id);
+
+
+  displayPeople("Spouse", spouse);
+  displayPeople("Parents", parents);
+  displayPeople("Siblings", siblings);
+}
+
 
 function findChildren(person, people) {
   let children = people.filter((personChecking) => {
