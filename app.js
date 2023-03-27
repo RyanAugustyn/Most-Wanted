@@ -91,8 +91,8 @@ function mainMenu(person, people) {
       break;
     case "descendants":
       //! TODO
-      // let personDescendants = findPersonDescendants(person, people);
-      // displayPeople('Descendants', personDescendants);
+      let personDescendants = findPersonDescendants(person, people);
+      displayPeople("Descendants", personDescendants);
       break;
     case "quit":
       return;
@@ -232,9 +232,8 @@ function getAllOccupations(people) {
   return Array.from(occupationSet);
 }
 
-
 function displayPersonInfo(person) {
-        alert(`ID: ${person.id}
+  alert(`ID: ${person.id}
         First Name: ${person.firstName}
         Last Name: ${person.lastName} 
         Gender: ${person.gender}
@@ -247,15 +246,14 @@ function displayPersonInfo(person) {
         Current Spouse ID: ${person.currentSpouse}`);
 }
 
-/*
-"id": 272822514,
-		"firstName": "Billy",
-		"lastName": "Bob",
-		"gender": "male",
-		"dob": "1/18/1949",
-		"height": 71,
-		"weight": 175,
-		"eyeColor": "brown",
-		"occupation": "programmer",
-		"parents": [],
-		"currentSpouse": 401222887*/
+function findPersonDescendants(person, people) {
+  let children = people.filter((personChecking) => {
+    let isParent = false;
+    personChecking["parents"].forEach((parentID) => {
+      if (parentID === person.id) isParent = true;
+    });
+    return isParent;
+  });
+
+  return children;
+}
