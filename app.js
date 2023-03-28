@@ -9,16 +9,16 @@ function displayWelcome() {
 }
 
 function runSearchAndMenu(people) {
-
   let searchResults = searchPeopleDataSet(people);
 
   while (searchResults.length > 1) {
     console.log(searchResults);
     displayPeople("Search Results", searchResults);
-    alert(`There are ${searchResults.length} results, please choose another trait to filter further...`)
+    alert(
+      `There are ${searchResults.length} results, please choose another trait to filter further...`
+    );
     searchResults = searchByTraits(searchResults);
-
-  } 
+  }
   if (searchResults.length === 1) {
     const person = searchResults[0];
     mainMenu(person, people);
@@ -26,7 +26,6 @@ function runSearchAndMenu(people) {
     alert("No one was found in the search.");
   }
 }
-
 
 function searchPeopleDataSet(people) {
   const searchTypeChoice = validatedPrompt(
@@ -162,7 +161,7 @@ function exitOrRestart(people) {
 function searchByTraits(people) {
   const traitToSearchFor = validatedPrompt(
     "Which trait would you like to search for?",
-    ["gender", "height", "weight", "eye color", "occupation"]
+    ["gender", "height", "weight", "eye color", "occupation", "quit"]
   );
 
   let peopleResults = [];
@@ -211,6 +210,7 @@ function searchByTraits(people) {
       );
       break;
     default:
+      peopleResults = [];
   }
 
   return peopleResults;
